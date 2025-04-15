@@ -1,11 +1,10 @@
 package com.mandar.fundbridge.dto;
 
 import com.mandar.fundbridge.enums.Roles;
-import com.mandar.fundbridge.model.Employee;
 
-public record SignUpDto(
-		Long employeeId,
-	    String email,
+public record WorkerSignUpDto(
+		Long workerId,
+	    String mobile,
 	    String password,
 	    Roles role) {
 	}

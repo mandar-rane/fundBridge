@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mandar.fundbridge.enums.EmployeeRole;
+import com.mandar.fundbridge.enums.Roles;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class Employee implements UserDetails{
 	private String email;
 	
 	@Enumerated(EnumType.STRING)
-	private EmployeeRole role; //EMPLOYEE, ADMIN
+	private Roles role; //EMPLOYEE, ADMIN
 	
 	private String password;
 		
@@ -46,7 +46,7 @@ public class Employee implements UserDetails{
 		return name;
 	}
 
-	public EmployeeRole getRole() {
+	public Roles getRole() {
 		return role;
 	}
 
@@ -55,7 +55,7 @@ public class Employee implements UserDetails{
 	}
 	
 
-	public Employee(Long employeeId, String  email,  String password, EmployeeRole role) {
+	public Employee(Long employeeId, String  email,  String password, Roles role) {
 		super();
 		this.id = employeeId;
 		this.email = email;
@@ -69,7 +69,7 @@ public class Employee implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		if(this.role == EmployeeRole.ADMIN) {
+		if(this.role == Roles.ADMIN) {
 			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
 		}	
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));

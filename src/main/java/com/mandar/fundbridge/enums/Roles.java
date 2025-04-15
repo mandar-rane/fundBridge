@@ -1,14 +1,17 @@
 
 package com.mandar.fundbridge.enums;
 
-public enum EmployeeRole {
+import com.mandar.fundbridge.model.Worker;
+
+public enum Roles {
 	
 	ADMIN("adminEmployee"),
-	USER("userEmployee");
+	USER("userEmployee"),
+	WORKER("worker");
 	
 	private String role;
 	
-	EmployeeRole(String role){
+	Roles(String role){
 		this.role = role;
 	}
 	

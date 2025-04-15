@@ -1,3 +1,4 @@
+
 package com.mandar.fundbridge.controller;
 
 import java.awt.CardLayout;
@@ -19,7 +20,10 @@ import com.mandar.fundbridge.config.auth.TokenProvider;
 import com.mandar.fundbridge.dto.JwtDto;
 import com.mandar.fundbridge.dto.SignInDto;
 import com.mandar.fundbridge.dto.SignUpDto;
+import com.mandar.fundbridge.dto.WorkerSignInDto;
+import com.mandar.fundbridge.dto.WorkerSignUpDto;
 import com.mandar.fundbridge.model.Employee;
+import com.mandar.fundbridge.model.Worker;
 import com.mandar.fundbridge.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -37,7 +41,7 @@ public class AuthController {
 	@Autowired
 	private TokenProvider tokenService;
 
-	@PostMapping("/signup")
+	@PostMapping("/employee/signup")
 	public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDto data) {
 		System.out.println("TRYING SIGN UP");
 		try {
@@ -50,7 +54,7 @@ public class AuthController {
 		}
 	}
 
-	@PostMapping("/signin")
+	@PostMapping("/employee/signin")
 	public ResponseEntity<JwtDto> signIn(@RequestBody @Valid SignInDto data) {
 		System.out.println("TRYING SIGN IN");
 		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),
@@ -62,5 +66,32 @@ public class AuthController {
 
 		return ResponseEntity.ok(new JwtDto(accessToken));
 	}
+	
+	@PostMapping("/worker/signup")
+	public ResponseEntity<?> workerSignUp(@RequestBody @Valid WorkerSignUpDto data) {
+		System.out.println("TRYING SIGN UP");
+		try {
+			service.signUp(data);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("SignUp Failed: " + e.getMessage());
+		}
+	}
+
+	@PostMapping("/worker/signin")
+	public ResponseEntity<JwtDto> workerSignIn(@RequestBody @Valid WorkerSignInDto data) {
+		System.out.println("TRYING SIGN IN");
+		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.mobile(),
+				data.password());
+
+		Authentication authUser = authenticationManager.authenticate(usernamePassword);
+		
+		String accessToken = tokenService.generateAccessToken((Worker) authUser.getPrincipal());
+
+		return ResponseEntity.ok(new JwtDto(accessToken));
+	}
+	
 
 }
